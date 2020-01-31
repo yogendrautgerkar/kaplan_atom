@@ -64,13 +64,13 @@ class Books extends Component {
                       {item.volumeInfo.title}
                     </Typography>
                     <Typography component="p">
-                      {item.volumeInfo.authors}
+                      Authors: {item.volumeInfo.authors}
                     </Typography>
                     <Typography component="p">
-                      {item.volumeInfo.publisher}
+                      Publisher: {item.volumeInfo.publisher}
                     </Typography>
                     <Typography component="p">
-                      {item.volumeInfo.publishedDate}
+                      Published Date: {item.volumeInfo.publishedDate}
                     </Typography>
                   </CardContent>
                 </Card>
