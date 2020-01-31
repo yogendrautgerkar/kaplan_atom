@@ -4,6 +4,7 @@ import CardContent from "@material-ui/core/CardContent";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
+import TextField from "@material-ui/core/TextField";
 
 class Books extends Component {
   constructor(props) {
@@ -47,14 +48,21 @@ class Books extends Component {
             style={{
               display: "flex",
               justifyContent: "space-between",
-              paddingBottom: "50px"
+              paddingBottom: "30px"
             }}
           >
-            <h2>Books</h2>
+            <h2 style={{ fontWeight: "bold" }}>Books</h2>
             <Button variant="contained" color="primary">
               Go To Course
             </Button>
           </div>
+          <Grid container spacing={4} style={{ paddingBottom: 10 }}>
+            <Grid item xs={12} sm={6} lg={6} xl={4}>
+              <TextField id="standard-basic" label="Search" fullWidth="true" />
+              <h1>All Books</h1>
+            </Grid>
+          </Grid>
+
           <Grid container spacing={4}>
             {books.map(item => (
               <Grid item xs={12} sm={6} lg={6} xl={4}>
