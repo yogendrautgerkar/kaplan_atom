@@ -4,7 +4,6 @@ import CardContent from "@material-ui/core/CardContent";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
-import TextField from "@material-ui/core/TextField";
 
 class Books extends Component {
   constructor(props) {
@@ -12,8 +11,10 @@ class Books extends Component {
     this.state = {
       error: null,
       isLoaded: false,
-      books: []
+      books: [],
+      searchString: ""
     };
+    this.handleChange = this.handleChange.bind(this);
   }
 
   async componentDidMount() {
@@ -25,6 +26,7 @@ class Books extends Component {
             isLoaded: true,
             books: result.items
           });
+          this.refs.search.focus();
         },
         error => {
           this.setState({
@@ -35,7 +37,21 @@ class Books extends Component {
       );
   }
 
+  handleChange() {
+    this.setState({
+      searchString: this.refs.search.value
+    });
+  }
+
   render() {
+    let _users = this.state.books;
+    let search = this.state.searchString.trim().toLowerCase();
+
+    if (search.length > 0) {
+      _users = _users.filter(function(user) {
+        return user.volumeInfo.title.toLowerCase().match(search);
+      });
+    }
     const { error, isLoaded, books } = this.state;
     if (error) {
       return <div>Error: {error.message}</div>;
@@ -56,35 +72,51 @@ class Books extends Component {
               Go To Course
             </Button>
           </div>
-          <Grid container spacing={4} style={{ paddingBottom: 10 }}>
-            <Grid item xs={12} sm={6} lg={6} xl={4}>
-              <TextField id="standard-basic" label="Search" fullWidth="true" />
-              <h1>All Books</h1>
-            </Grid>
-          </Grid>
-
-          <Grid container spacing={4}>
-            {books.map(item => (
+          <div>
+            <Grid container spacing={4} style={{ paddingBottom: 10 }}>
               <Grid item xs={12} sm={6} lg={6} xl={4}>
-                <Card key={item.id} style={{ borderLeft: "4px #ffa839 solid" }}>
-                  <CardContent>
-                    <Typography gutterBottom variant="headline" component="h2">
-                      {item.volumeInfo.title}
-                    </Typography>
-                    <Typography component="p">
-                      Authors: {item.volumeInfo.authors}
-                    </Typography>
-                    <Typography component="p">
-                      Publisher: {item.volumeInfo.publisher}
-                    </Typography>
-                    <Typography component="p">
-                      Published Date: {item.volumeInfo.publishedDate}
-                    </Typography>
-                  </CardContent>
-                </Card>
+                <input
+                  type="string"
+                  value={this.state.searchString}
+                  ref="search"
+                  onChange={this.handleChange}
+                  placeholder="Search Here"
+                  style={{
+                    marginBottom: "20px",
+                    height: "40px",
+                    width: "100%",
+                    fontSize: "20px"
+                  }}
+                />{" "}
+                <h1>All Books</h1>
               </Grid>
-            ))}
-          </Grid>
+            </Grid>
+
+            <Grid container spacing={4}>
+              {_users.map(l => {
+                return (
+                  <Grid item xs={12} sm={6} lg={6} xl={4}>
+                    <Card style={{ borderLeft: "4px #ffa839 solid" }}>
+                      <CardContent>
+                        <Typography gutterBottom variant="h6" component="h2">
+                          {l.volumeInfo.title}
+                        </Typography>
+                        <Typography component="p" variant="body1">
+                          Authors: {l.volumeInfo.authors}
+                        </Typography>
+                        <Typography component="p" variant="body1">
+                          Publisher: {l.volumeInfo.publisher}
+                        </Typography>
+                        <Typography component="p" variant="body1">
+                          Published Date: {l.volumeInfo.publishedDate}
+                        </Typography>
+                      </CardContent>
+                    </Card>
+                  </Grid>
+                );
+              })}
+            </Grid>
+          </div>
         </div>
       );
     }
